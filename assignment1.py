@@ -8,11 +8,11 @@ X, y = load_svmlight_file('diabetes_scale')
 X = X.toarray()
 
 #split dataset
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.9, random_state=42)
 
 #perceptron class
 class Perceptron:
-    def __init__(self, max_iter=440, step_size=0.0001):
+    def __init__(self, max_iter=1000, step_size=0.001):
         self.max_iter = max_iter
         self.step_size = step_size
         self.accuracy = []
@@ -20,8 +20,10 @@ class Perceptron:
         
 
     def fit(self, X, y):
-        #initialize weight to 1
-        self.w = np.zeros(X.shape[1])
+        #initialize weight to -1
+        self.w=np.zeros(X.shape[1])
+        for i in range(self.w.shape[0]):
+            self.w[i] = 1
         #initialize bias to 0
         self.b = 0
         #loop through the dataset for max_iter times
@@ -52,7 +54,7 @@ class Perceptron:
                     correct += 1
             accuracy = correct / len(y_train)
             self.train_accuracy.append(accuracy)
-           
+            
             
     
         return self
@@ -67,8 +69,12 @@ perceptron = Perceptron()
 perceptron.fit(X_train, y_train)
 print (perceptron.accuracy[-1])
 #plot accuracys
-plt.plot(perceptron.accuracy)
-plt.plot(perceptron.train_accuracy)
+plt.plot(perceptron.accuracy,label='test')
+plt.plot(perceptron.train_accuracy,label='train')
+plt.legend(['test','train'])
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('Perceptron setp size 0.001')
 plt.show()
 
 
